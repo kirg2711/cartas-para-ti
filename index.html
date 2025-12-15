@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cartas para ti</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #f8bbd0, #fce4ec);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 380px;
+      height: 90vh;
+      background: #fff;
+      border-radius: 25px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .header {
+      background: #ec407a;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 1.3em;
+      font-weight: bold;
+    }
+
+    .content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .card {
+      background: #fce4ec;
+      border-radius: 20px;
+      padding: 25px;
+      text-align: center;
+      font-size: 1.1em;
+      color: #444;
+      animation: aparecer 0.8s ease;
+    }
+
+    .footer {
+      padding: 15px;
+      text-align: center;
+      font-size: 0.9em;
+      color: #999;
+    }
+
+    @keyframes aparecer {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <div class="header">💌 Carta del día</div>
+
+    <div class="content">
+      <div class="card" id="cardText"></div>
+    </div>
+
+    <div class="footer">Vuelve mañana ✨</div>
+  </div>
+
+  <script>
+    const cartas = [
+      "Gracias por existir y hacer todo más bonito.",
+      "Hoy recuerda lo valiosa que eres.",
+      "Tu sonrisa puede cambiar un día entero.",
+      "Hay personas que hacen del mundo un mejor lugar.",
+      "Nunca olvides lo especial que eres."
+    ];
+
+    const hoy = new Date().toDateString();
+    const fechaGuardada = localStorage.getItem("fechaCarta");
+
+    let indice;
+
+    if (fechaGuardada === hoy) {
+      indice = localStorage.getItem("indiceCarta");
+    } else {
+      indice = Math.floor(Math.random() * cartas.length);
+      localStorage.setItem("fechaCarta", hoy);
+      localStorage.setItem("indiceCarta", indice);
+    }
+
+    document.getElementById("cardText").innerText = cartas[indice];
+  </script>
+</body>
+</html>
