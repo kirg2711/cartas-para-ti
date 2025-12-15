@@ -5,12 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cartas para ti</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
-    }
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ec407a">
 
+  <style>
     body {
       margin: 0;
       height: 100vh;
@@ -18,18 +16,18 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      font-family: Arial, sans-serif;
     }
 
     .app {
       width: 100%;
       max-width: 380px;
       height: 90vh;
-      background: #fff;
+      background: white;
       border-radius: 25px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
       display: flex;
       flex-direction: column;
-      overflow: hidden;
     }
 
     .header {
@@ -37,8 +35,7 @@
       color: white;
       padding: 20px;
       text-align: center;
-      font-size: 1.3em;
-      font-weight: bold;
+      font-size: 1.2em;
     }
 
     .content {
@@ -55,33 +52,20 @@
       padding: 25px;
       text-align: center;
       font-size: 1.1em;
-      color: #444;
-      animation: aparecer 0.8s ease;
     }
 
     .footer {
-      padding: 15px;
       text-align: center;
+      padding: 10px;
       font-size: 0.9em;
-      color: #999;
-    }
-
-    @keyframes aparecer {
-      from {
-        opacity: 0;
-        transform: translateY(20px) scale(0.95);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
+      color: #888;
     }
   </style>
 </head>
 
 <body>
   <div class="app">
-    <div class="header">💌 Carta del día</div>
+    <div class="header">💌 Frase del día para una Reina</div>
 
     <div class="content">
       <div class="card" id="cardText"></div>
@@ -92,27 +76,66 @@
 
   <script>
     const cartas = [
-      "Gracias por existir y hacer todo más bonito.",
-      "Hoy recuerda lo valiosa que eres.",
-      "Tu sonrisa puede cambiar un día entero.",
-      "Hay personas que hacen del mundo un mejor lugar.",
-      "Nunca olvides lo especial que eres."
+      "Gracias por existir.",
+      "Hoy recuerda lo especial que eres.",
+      "Tu sonrisa hace todo mejor.",
+      "Hay personas que iluminan el mundo.",
+      "Eres una creación maravillosa de Dios, única y valiosa.",
+      "Confía en ti mismo, porque Dios ha puesto fuerza dentro de ti.",
+      "Cada día es una oportunidad para crecer y amarte más.",
+      "Recuerda que eres digno de amor y respeto, siempre.",
+      "Dios te guía y acompaña, incluso en los días difíciles.",
+      "Eres capaz de superar cualquier obstáculo con fe y paciencia.",
+      "Ama tu corazón, cuida tu alma y valora tus sentimientos.",
+      "La fortaleza viene de confiar en Dios y en ti mismo.",
+      "Nunca olvides que eres suficiente tal como eres.",
+      "Cada día es una bendición; aprovéchala con gratitud.",
+      "Permítete descansar y sanar; Dios ve tus esfuerzos.",
+      "Tu valor no depende de lo que otros piensen de ti.",
+      "La paciencia y la fe te harán más fuerte cada día.",
+      "Eres amado y querido más de lo que imaginas.",
+      "El amor propio no es egoísmo, es reconocer tu dignidad.",
+      "Dios siempre tiene un plan hermoso para tu vida.",
+      "Agradece lo que tienes y confía en lo que vendrá.",
+      "Eres luz en este mundo; no dejes que nadie te apague.",
+      "Tú eres la respuesta a tus propios miedos y dudas.",
+      "Recuerda que cada error es una oportunidad para aprender.",
+      "Ama tu camino, incluso si es diferente al de los demás.",
+      "Dios fortalece tu corazón cuando sientes debilidad.",
+      "Confía en tu intuición; Dios la guía siempre.",
+      "Eres valioso hoy y siempre; nunca lo olvides.",
+      "Cree en ti mismo; Dios cree en ti mucho más.",
+      "Tu espíritu es fuerte; nada puede derribarte con fe."
     ];
 
-    const hoy = new Date().toDateString();
-    const fechaGuardada = localStorage.getItem("fechaCarta");
-
-    let indice;
-
-    if (fechaGuardada === hoy) {
-      indice = localStorage.getItem("indiceCarta");
-    } else {
-      indice = Math.floor(Math.random() * cartas.length);
-      localStorage.setItem("fechaCarta", hoy);
-      localStorage.setItem("indiceCarta", indice);
+    // Función para mezclar el arreglo (Fisher-Yates shuffle)
+    function mezclarArray(array) {
+      const a = array.slice(); // copia del array
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
     }
 
-    document.getElementById("cardText").innerText = cartas[indice];
+    // Guardar o recuperar el orden aleatorio
+    let ordenCartas = JSON.parse(localStorage.getItem("ordenCartas"));
+    if (!ordenCartas || ordenCartas.length !== cartas.length) {
+      ordenCartas = mezclarArray(cartas);
+      localStorage.setItem("ordenCartas", JSON.stringify(ordenCartas));
+    }
+
+    // Elegir el mensaje según el día del mes
+    const diaDelMes = new Date().getDate(); // 1 a 31
+    const indice = diaDelMes - 1; // arrays empiezan en 0
+    document.getElementById("cardText").innerText = ordenCartas[indice];
+
+    // Registrar Service Worker para PWA
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js");
+    }
   </script>
 </body>
 </html>
+
+
